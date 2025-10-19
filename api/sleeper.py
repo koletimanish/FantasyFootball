@@ -15,31 +15,20 @@ class Sleeper:
         df = pd.DataFrame()
         for player_id in response.json():
             player_info = response.json()[player_id]
-            if(player_info.get("sport") != "nfl" and player_info.get("status") != "active"):
+            if(player_info.get("sport", "") != "nfl" or player_info.get("status", "") != "active"):
                 continue
             
-            if(player_info.get("position") == 'DEF'):
-                player_data = {
-                    "id": player_id,
-                    "first_name": player_info.get("first_name", ""),
-                    "last_name": player_info.get("last_name", ""),
-                    "position": player_info.get("position", ""),
-                    "status": "",
-                    "fantasy_data_id": "",
-                    "espn_id": "",
-                    "yahoo_id": "",
-                }
-            else:
-                player_data = {
-                    "id": player_id,
-                    "first_name": player_info.get("first_name", ""),
-                    "last_name": player_info.get("last_name", ""),
-                    "position": player_info.get("position", ""),
-                    "status": player_info.get("status", ""),
-                    "fantasy_data_id": player_info.get("fantasy_data_id", ""),
-                    "espn_id": player_info.get("espn_id", ""),
-                    "yahoo_id": player_info.get("yahoo_id", ""),
-                }
+            player_data = {
+                "id": player_id,
+                "first_name": player_info.get("first_name", ""),
+                "last_name": player_info.get("last_name", ""),
+                "position": player_info.get("position", ""),
+                "status": player_info.get("status", ""),
+                "fantasy_data_id": player_info.get("fantasy_data_id", ""),
+                "espn_id": player_info.get("espn_id", ""),
+                "yahoo_id": player_info.get("yahoo_id", ""),
+            }
+            
             df = pd.concat([df, pd.DataFrame([player_data])], ignore_index=True)
             print(f"Dataframe now has {len(df)} elements after adding {player_data['first_name']} {player_data['last_name']}")
         # Change to project root directory and save pickle file in data folder
